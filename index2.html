@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ASTM D790-17 — Silk ADM Flexural Testing Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:   #0b1f38;
+    --navy2:  #0f2a4a;
+    --teal:   #0f9b76;
+    --teal2:  #07c99a;
+    --teal-l: #e0f5ef;
+    --amber:  #d4860f;
+    --amber-l:#fef3e2;
+    --coral:  #c94040;
+    --coral-l:#fdeaea;
+    --purple: #5b3fa8;
+    --purple-l:#eeebfb;
+    --ink:    #1a1a2e;
+    --mid:    #4a5568;
+    --muted:  #718096;
+    --line:   #e2e8f0;
+    --bg:     #f7f8fc;
+    --white:  #ffffff;
+    --card-r: 12px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 0 0 60px;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #0b1f38 0%, #0f2d50 50%, #0c3028 100%);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent, transparent 40px,
+      rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px
+    );
+  }
+  .hero-inner { max-width: 1000px; margin: 0 auto; position: relative; }
+  .hero-eyebrow {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: #5ec4a3; margin-bottom: 10px; font-weight: 500;
+  }
+  .hero h1 {
+    font-family: 'Lora', serif;
+    font-size: 28px; font-weight: 700;
+    color: #fff; line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: #7dd4b0; }
+  .hero-sub { font-size: 13px; color: #7aacce; line-height: 1.7; max-width: 680px; }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .badge {
+    font-size: 11px; font-weight: 500; padding: 4px 12px;
+    border-radius: 20px; border: 1px solid;
+  }
+  .badge-teal  { background: rgba(7,201,154,.12); color: #5ec4a3; border-color: rgba(7,201,154,.3); }
+  .badge-blue  { background: rgba(100,160,230,.12); color: #7aacce; border-color: rgba(100,160,230,.3); }
+  .badge-amber { background: rgba(212,134,15,.12); color: #f0a843; border-color: rgba(212,134,15,.3); }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 1000px; margin: 0 auto; padding: 32px 24px 0; }
+
+  .section-label {
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin: 32px 0 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--line);
+  }
+
+  /* ── PARAM GRID ── */
+  .param-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px,1fr)); gap: 12px; }
+  .param-card {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--card-r); padding: 16px 18px;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .param-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
+  .param-card .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; font-weight: 600;
+    color: var(--teal); line-height: 1.3;
+  }
+  .param-card .lbl { font-size: 12px; color: var(--mid); margin-top: 4px; font-weight: 500; }
+  .param-card .sub { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+  /* ── FLOWCHART — FLOATING BUTTONS ── */
+  .flow-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 8px 0;
+  }
+  .flow-row { display: flex; align-items: center; justify-content: center; gap: 0; width: 100%; }
+  .flow-step {
+    background: var(--white);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 20px;
+    min-width: 260px;
+    max-width: 380px;
+    flex: 0 0 auto;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 0 0 0 rgba(15,155,118,0);
+    transition: box-shadow .25s, transform .2s, border-color .2s;
+    cursor: default;
+    position: relative;
+  }
+  .flow-step:hover {
+    box-shadow: 0 6px 28px rgba(0,0,0,.1), 0 0 0 3px rgba(15,155,118,.15);
+    transform: translateY(-2px);
+    border-color: var(--teal);
+  }
+  .flow-step-num {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--teal); font-weight: 700; margin-bottom: 4px;
+  }
+  .flow-step-title {
+    font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.3;
+  }
+  .flow-step-body {
+    font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.5;
+  }
+  .flow-step-tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px; margin-top: 7px;
+  }
+  .tag-teal   { background: var(--teal-l);   color: #0a6b53; }
+  .tag-amber  { background: var(--amber-l);  color: #9a5e08; }
+  .tag-coral  { background: var(--coral-l);  color: #8b2828; }
+  .tag-purple { background: var(--purple-l); color: #3d2880; }
+  .tag-navy   { background: #e8eef5; color: #1a3a5c; }
+
+  /* Connector arrow */
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    height: 36px; position: relative;
+  }
+  .flow-arrow::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 1.5px;
+    background: linear-gradient(to bottom, var(--teal), var(--teal2));
+    transform: translateX(-50%);
+  }
+  .flow-arrow::after {
+    content: '';
+    position: absolute;
+    left: 50%; bottom: 0;
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--teal2);
+    transform: translateX(-50%);
+  }
+
+  /* Decision diamond row */
+  .flow-decision-wrap {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; gap: 0; position: relative;
+    margin: 4px 0;
+  }
+  .flow-diamond {
+    width: 120px; height: 60px;
+    background: var(--white);
+    border: 1.5px solid var(--teal);
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 12px; font-weight: 600; color: var(--teal);
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    transform: rotate(0deg);
+    position: relative; z-index: 2;
+    flex-shrink: 0;
+  }
+  .flow-diamond-label { font-size: 10px; color: var(--muted); font-weight: 400; }
+  .flow-branch {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+  }
+  .flow-branch-line {
+    display: flex; align-items: center; gap: 0;
+  }
+  .flow-h-line {
+    height: 1.5px;
+    background: var(--teal);
+    width: 48px;
+  }
+  .flow-branch-label {
+    font-size: 10px; font-weight: 600;
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .bl-yes { background: var(--teal-l); color: #0a6b53; }
+  .bl-no  { background: var(--amber-l); color: #9a5e08; }
+  .flow-branch-card {
+    background: var(--white); border: 1.5px solid var(--line);
+    border-radius: 10px; padding: 10px 14px; min-width: 130px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    font-size: 12px;
+  }
+  .flow-branch-card .bc-title { font-weight: 600; font-size: 12px; color: var(--ink); }
+  .flow-branch-card .bc-sub   { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
+
+  /* converge arrow below branches */
+  .flow-converge {
+    display: flex; align-items: flex-end; justify-content: center;
+    width: 100%; height: 44px; position: relative; margin: -4px 0;
+  }
+  .flow-converge::before {
+    content: '';
+    position: absolute; left: 50%; top: 0; height: 100%; width: 1.5px;
+    background: linear-gradient(to bottom, var(--teal), var(--teal2));
+    transform: translateX(-50%);
+  }
+  .flow-converge::after {
+    content: '';
+    position: absolute; left: 50%; bottom: 0;
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--teal2);
+    transform: translateX(-50%);
+  }
+
+  /* ACCENT step */
+  .flow-step.accent {
+    background: linear-gradient(135deg, #0b3028 0%, #0f3d30 100%);
+    border-color: var(--teal);
+    box-shadow: 0 4px 20px rgba(15,155,118,.15);
+  }
+  .flow-step.accent .flow-step-title { color: #7dd4b0; }
+  .flow-step.accent .flow-step-body  { color: #5ec4a3; }
+  .flow-step.accent .flow-step-num   { color: var(--teal2); }
+
+  .flow-step.purple-accent {
+    background: linear-gradient(135deg, #1e1040 0%, #2d1860 100%);
+    border-color: #7b5ed4;
+    box-shadow: 0 4px 20px rgba(91,63,168,.15);
+  }
+  .flow-step.purple-accent .flow-step-title { color: #b8a5f0; }
+  .flow-step.purple-accent .flow-step-body  { color: #9580d8; }
+  .flow-step.purple-accent .flow-step-num   { color: #c4b1f7; }
+
+  /* ── EQUATIONS ── */
+  .eq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .eq-grid { grid-template-columns: 1fr; } }
+  .eq-card {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--card-r); padding: 16px 18px;
+  }
+  .eq-card .eq {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; font-weight: 600;
+    color: var(--navy); background: var(--bg);
+    border-left: 3px solid var(--teal);
+    padding: 8px 12px; border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .eq-card .eq-name { font-size: 13px; font-weight: 600; color: var(--mid); margin-bottom: 4px; }
+  .eq-card .eq-vars { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .eq-card .eq-vars code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--navy); background: #eef2f8; padding: 1px 5px; border-radius: 3px; }
+
+  /* ── ACCORDION ── */
+  .accordion { margin-bottom: 12px; }
+  .accordion-btn {
+    width: 100%; background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--card-r);
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; text-align: left;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .accordion-btn:hover { border-color: var(--teal); box-shadow: 0 2px 12px rgba(15,155,118,.1); }
+  .accordion-btn.open {
+    border-radius: var(--card-r) var(--card-r) 0 0;
+    border-color: var(--teal);
+    border-bottom-color: transparent;
+  }
+  .acc-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .acc-icon-sci  { background: var(--purple-l); color: var(--purple); }
+  .acc-icon-mgr  { background: var(--teal-l);   color: var(--teal);   }
+  .acc-icon-silk { background: var(--amber-l);  color: var(--amber);  }
+  .acc-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .acc-sub   { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .acc-chevron {
+    margin-left: auto; font-size: 18px; color: var(--muted);
+    transition: transform .3s;
+  }
+  .accordion-btn.open .acc-chevron { transform: rotate(180deg); color: var(--teal); }
+
+  .accordion-body {
+    background: var(--white);
+    border: 1px solid var(--teal);
+    border-top: none;
+    border-radius: 0 0 var(--card-r) var(--card-r);
+    padding: 20px 22px;
+    display: none;
+  }
+  .accordion-body.open { display: block; animation: accOpen .25s ease; }
+  @keyframes accOpen { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+
+  .acc-content p { font-size: 13.5px; color: var(--mid); line-height: 1.75; margin-bottom: 12px; }
+  .acc-content p:last-child { margin-bottom: 0; }
+  .acc-content strong { color: var(--ink); font-weight: 600; }
+  .acc-content em { font-style: italic; color: var(--muted); }
+
+  .acc-note {
+    background: var(--teal-l); border-left: 3px solid var(--teal);
+    border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 12px 0;
+    font-size: 12.5px; color: #0a5c46; line-height: 1.6;
+  }
+  .acc-warn {
+    background: var(--amber-l); border-left: 3px solid var(--amber);
+    border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 12px 0;
+    font-size: 12.5px; color: #7a4c06; line-height: 1.6;
+  }
+  .acc-list { margin: 10px 0 10px 18px; }
+  .acc-list li { font-size: 13px; color: var(--mid); margin-bottom: 7px; line-height: 1.6; }
+  .acc-list li::marker { color: var(--teal); }
+
+  /* ── SILK-SPECIFIC SECTION ── */
+  .silk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 14px; }
+  .silk-card {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--card-r); overflow: hidden;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .silk-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.08); transform: translateY(-2px); }
+  .silk-card-head {
+    padding: 14px 18px 10px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .silk-card-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .silk-card-head h3 { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .silk-card-head .sc-cat { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+  .silk-card-body { padding: 0 18px 16px 18px; }
+  .silk-card-body p { font-size: 12.5px; color: var(--mid); line-height: 1.65; }
+  .silk-divider { height: 1px; background: var(--line); margin: 10px 0; }
+  .silk-action {
+    font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 6px;
+    display: inline-block; margin-top: 8px;
+  }
+  .ia-teal   { background: var(--teal-l);   color: #0a6b53; }
+  .ia-amber  { background: var(--amber-l);  color: #9a5e08; }
+  .ia-coral  { background: var(--coral-l);  color: #8b2828; }
+  .ia-purple { background: var(--purple-l); color: #3d2880; }
+  .ia-navy   { background: #e8eef5;         color: #1a3a5c; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    max-width: 1000px; margin: 48px auto 0; padding: 0 24px;
+    border-top: 1px solid var(--line); padding-top: 20px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+  }
+  .doc-footer p { font-size: 11px; color: var(--muted); }
+  .doc-footer .watermark { font-family: 'Lora', serif; font-size: 12px; color: var(--teal); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Serigen Mediproducts · R&amp;D Test Protocol</div>
+    <h1>ASTM D790-17<br><span>Flexural Properties Testing</span></h1>
+    <p class="hero-sub">Standard Test Methods for Flexural Properties of Unreinforced and Reinforced Plastics — applied to Silk-Based Acellular Dermal Matrix for breast implant support applications</p>
+    <div class="hero-badges">
+      <span class="badge badge-teal">Procedure A — preferred</span>
+      <span class="badge badge-blue">3-Point Bending</span>
+      <span class="badge badge-amber">Semi-rigid biomaterial</span>
+      <span class="badge badge-teal">Minimum n = 5 specimens</span>
+      <span class="badge badge-blue">Max strain limit = 5%</span>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ═══════════════════ KEY PARAMETERS ═══════════════════ -->
+  <div class="section-label">Key test parameters at a glance</div>
+  <div class="param-grid">
+    <div class="param-card">
+      <div class="val">≥ 5</div>
+      <div class="lbl">Specimens per batch</div>
+      <div class="sub">Cut from same silk ADM sheet · test each direction</div>
+    </div>
+    <div class="param-card">
+      <div class="val">16 : 1</div>
+      <div class="lbl">Span-to-depth ratio (L:d)</div>
+      <div class="sub">Standard for semi-rigid materials — ±1% tolerance</div>
+    </div>
+    <div class="param-card">
+      <div class="val">0.01 mm/mm/min</div>
+      <div class="lbl">Strain rate — Procedure A</div>
+      <div class="sub">Preferred for accurate flexural modulus</div>
+    </div>
+    <div class="param-card">
+      <div class="val">5 % max</div>
+      <div class="lbl">Strain limit</div>
+      <div class="sub">Stop test at 5% strain if no failure occurs</div>
+    </div>
+    <div class="param-card">
+      <div class="val">5.0 ± 0.1 mm</div>
+      <div class="lbl">Loading nose radius</div>
+      <div class="sub">Same radius for both support rods</div>
+    </div>
+    <div class="param-card">
+      <div class="val">± 1 %</div>
+      <div class="lbl">Load indicator accuracy</div>
+      <div class="sub">Verify per ASTM Practice E4</div>
+    </div>
+    <div class="param-card">
+      <div class="val">0.03 mm</div>
+      <div class="lbl">Dimension measurement precision</div>
+      <div class="sub">Width and depth at midspan — micrometer required</div>
+    </div>
+    <div class="param-card">
+      <div class="val">R = ZL²/6d</div>
+      <div class="lbl">Crosshead rate formula</div>
+      <div class="sub">Z = 0.01 · L = span · d = depth (±10% tolerance)</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ FLOWCHART ═══════════════════ -->
+  <div class="section-label">Test procedure — step by step</div>
+
+  <div class="flow-wrap">
+
+    <!-- STEP 1 -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 01 &nbsp;·&nbsp; Preparation</div>
+        <div class="flow-step-title">Specimen cutting &amp; dimensions</div>
+        <div class="flow-step-body">Cut ≥ 5 rectangular strips from the silk ADM sheet. Width must not exceed span ÷ 4. Depth = material thickness. Opposite sides must be flat and parallel (±0.2 mm).</div>
+        <span class="flow-step-tag tag-teal">n ≥ 5 per direction</span>
+        <span class="flow-step-tag tag-navy">ASTM D5947 dimensions</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 2 -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 02 &nbsp;·&nbsp; Conditioning</div>
+        <div class="flow-step-title">Environmental conditioning</div>
+        <div class="flow-step-body">Condition per ASTM D618 Procedure A: 23 ± 2 °C, 50 ± 5% relative humidity, minimum 40 hours. <em>For silk ADM — also prepare hydrated set soaked in PBS 30 min before testing.</em></div>
+        <span class="flow-step-tag tag-teal">23 ± 2 °C</span>
+        <span class="flow-step-tag tag-amber">Wet state = clinical relevance</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 3 -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 03 &nbsp;·&nbsp; Setup</div>
+        <div class="flow-step-title">Measure dimensions &amp; set span</div>
+        <div class="flow-step-body">Measure width (b) and depth (d) to nearest 0.03 mm at the centre of the support span. Set span L = 16 × d. Align loading nose exactly midway between supports. Verify parallelism.</div>
+        <span class="flow-step-tag tag-teal">L = 16 × d (±1%)</span>
+        <span class="flow-step-tag tag-navy">Loading nose ≠ touching specimen yet</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 4 -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 04 &nbsp;·&nbsp; Setup</div>
+        <div class="flow-step-title">Calculate &amp; set crosshead rate R</div>
+        <div class="flow-step-body">Calculate R = ZL² / 6d where Z = 0.01 mm/mm/min (Procedure A). Programme the Instron/UTM to this rate. Actual crosshead rate must not differ by more than ±10%.</div>
+        <span class="flow-step-tag tag-teal">Z = 0.01 (Procedure A)</span>
+        <span class="flow-step-tag tag-amber">±10% tolerance on R</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 5 — ACCENT -->
+    <div class="flow-row">
+      <div class="flow-step accent">
+        <div class="flow-step-num">Step 05 &nbsp;·&nbsp; Testing</div>
+        <div class="flow-step-title">Apply load — record load-deflection</div>
+        <div class="flow-step-body">Apply load at rate R. Record simultaneous load P (N) vs deflection D (mm) continuously. Measure deflection by crosshead position (Type I) or deflectometer (Type II — more accurate). Report which method was used.</div>
+        <span class="flow-step-tag tag-teal">Type II (deflectometer) preferred for accuracy</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- DECISION -->
+    <div class="flow-decision-wrap">
+      <!-- YES branch -->
+      <div class="flow-branch">
+        <div style="display:flex;align-items:center;">
+          <div class="flow-h-line"></div>
+          <span class="flow-branch-label bl-yes" style="margin-right:8px;">YES — break/yield</span>
+        </div>
+        <div class="flow-branch-card">
+          <div class="bc-title">Record σ<sub>fM</sub> or σ<sub>fB</sub></div>
+          <div class="bc-sub">max stress at break<br>or yield point Y</div>
+        </div>
+      </div>
+
+      <!-- DIAMOND -->
+      <div class="flow-diamond">
+        <div style="font-size:11px;font-weight:700;line-height:1.2;">Break or yield</div>
+        <div class="flow-diamond-label">within 5% strain?</div>
+      </div>
+
+      <!-- NO branch -->
+      <div class="flow-branch">
+        <div style="display:flex;align-items:center;">
+          <span class="flow-branch-label bl-no" style="margin-left:8px;">NO — 5% limit reached</span>
+          <div class="flow-h-line"></div>
+        </div>
+        <div class="flow-branch-card">
+          <div class="bc-title">Record stress at 5%</div>
+          <div class="bc-sub">σ<sub>f</sub> at ε<sub>f</sub> = 0.05<br>switch to Proc. B if needed</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-converge"></div>
+
+    <!-- STEP 6 — Apply toe compensation first -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 06 &nbsp;·&nbsp; Data correction</div>
+        <div class="flow-step-title">Apply toe compensation (Annex A1)</div>
+        <div class="flow-step-body">The initial toe region of the curve is an artefact (specimen seating, machine slack) — not a material property. Extend the linear CD region back to the strain axis. Point B = corrected zero-strain origin. All strain values must be measured from Point B.</div>
+        <span class="flow-step-tag tag-coral">Mandatory before calculation</span>
+        <span class="flow-step-tag tag-navy">Annex A1 — D790-17</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 7 — PURPLE ACCENT -->
+    <div class="flow-row">
+      <div class="flow-step purple-accent">
+        <div class="flow-step-num">Step 07 &nbsp;·&nbsp; Calculation</div>
+        <div class="flow-step-title">Calculate all flexural properties</div>
+        <div class="flow-step-body">Use corrected load-deflection data. Calculate: flexural stress σ<sub>f</sub>, flexural strain ε<sub>f</sub>, tangent modulus E<sub>B</sub>, and flexural strength σ<sub>fM</sub>. For silk: report both dry and wet results if tested in both states.</div>
+        <span class="flow-step-tag tag-purple">3 significant figures</span>
+        <span class="flow-step-tag tag-purple">Equations — see section below</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 8 -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 08 &nbsp;·&nbsp; Statistics</div>
+        <div class="flow-step-title">Compute mean and standard deviation</div>
+        <div class="flow-step-body">For each property, calculate arithmetic mean (3 sig. fig.) and estimated standard deviation across all ≥ 5 specimens. Exclude and note any specimen that breaks at an obvious flaw (and retest).</div>
+        <span class="flow-step-tag tag-teal">Mean ± SD for each property</span>
+        <span class="flow-step-tag tag-amber">Retest if flaw-related break</span>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- STEP 9 -->
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="flow-step-num">Step 09 &nbsp;·&nbsp; Report</div>
+        <div class="flow-step-title">Compile test report</div>
+        <div class="flow-step-body">Include: material ID, specimen prep method, dimensions (b and d), Procedure (A or B), Type (I or II), support span L, crosshead rate R, σ<sub>fM</sub>, E<sub>B</sub>, ε<sub>f</sub>, behaviour type (yielding / rupture / neither), hydration state, fibre orientation tested, and date.</div>
+        <span class="flow-step-tag tag-navy">Cite standard as D790-AI or D790-BI</span>
+        <span class="flow-step-tag tag-teal">State hydration condition for silk</span>
+      </div>
+    </div>
+
+  </div><!-- /flow-wrap -->
+
+  <!-- ═══════════════════ EQUATIONS ═══════════════════ -->
+  <div class="section-label">Key equations</div>
+  <div class="eq-grid">
+    <div class="eq-card">
+      <div class="eq-name">Flexural stress</div>
+      <div class="eq">σ<sub>f</sub> = 3PL / 2bd²</div>
+      <div class="eq-vars">
+        <code>P</code> = load at any point on curve (N) &nbsp;·&nbsp;
+        <code>L</code> = span (mm) &nbsp;·&nbsp;
+        <code>b</code> = width (mm) &nbsp;·&nbsp;
+        <code>d</code> = depth (mm)<br>
+        Result in <strong>MPa</strong>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-name">Tangent modulus of elasticity</div>
+      <div class="eq">E<sub>B</sub> = L³m / 4bd³</div>
+      <div class="eq-vars">
+        <code>m</code> = slope of the steepest initial linear region of the load-deflection curve (N/mm)<br>
+        Result in <strong>MPa</strong>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-name">Flexural strain</div>
+      <div class="eq">ε<sub>f</sub> = 6Dd / L²</div>
+      <div class="eq-vars">
+        <code>D</code> = midspan deflection (mm) &nbsp;·&nbsp;
+        <code>d</code> = depth (mm) &nbsp;·&nbsp;
+        <code>L</code> = span (mm)<br>
+        Result is dimensionless (mm/mm)
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-name">Crosshead rate (Procedure A)</div>
+      <div class="eq">R = ZL² / 6d</div>
+      <div class="eq-vars">
+        <code>Z</code> = 0.01 mm/mm/min (Procedure A) or 0.10 (Procedure B) &nbsp;·&nbsp;
+        Actual rate must be within ±10% of calculated R
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ ACCORDIONS ═══════════════════ -->
+  <div class="section-label">Detailed notes</div>
+
+  <!-- SCIENTIST NOTE -->
+  <div class="accordion">
+    <button class="accordion-btn" onclick="toggleAcc(this)" aria-expanded="false">
+      <div class="acc-icon acc-icon-sci">🔬</div>
+      <div>
+        <div class="acc-title">Scientist note — technical details &amp; critical considerations</div>
+        <div class="acc-sub">For lab personnel running the test — methodology depth, calibration, curve interpretation</div>
+      </div>
+      <div class="acc-chevron">▾</div>
+    </button>
+    <div class="accordion-body">
+      <div class="acc-content">
+        <p><strong>Machine setup and compliance correction:</strong> Universal testing machines (e.g., Instron 3343, Zwick Z2.5) exhibit drive-system compliance — reported crosshead displacement differs from actual specimen displacement due to load frame stiffness, drive wind-up, and fixture compliance. For accurate flexural modulus of a soft biomaterial like silk ADM, either use a <strong>Type II deflectometer</strong> (preferred — eliminates compliance error entirely) or perform the machine compliance correction procedure described in Appendix X1 of ASTM D790-17 before reporting E<sub>B</sub>.</p>
+
+        <div class="acc-note">The tangent modulus E<sub>B</sub> is the slope <em>m</em> of the steepest initial linear region of the load-deflection curve, fitted by hand or via linear regression software. Silk ADM may not show a clearly defined linear (Hookean) region — if so, report the <strong>secant modulus</strong> at a pre-specified strain (e.g. 2%) and state which method was used. Chord modulus between two fixed strain points (Eq 7) is also acceptable — state the chosen strain interval.</div>
+
+        <p><strong>Toe compensation (Annex A1) is mandatory:</strong> The initial concave "toe" region of the curve is caused by specimen seating and machine slack — not a material property. Construct a tangent to the steepest initial linear region and extrapolate to the strain axis. The x-intercept (Point B) is the corrected zero-strain point. All strains must be measured from B. Skipping this step will systematically underestimate E<sub>B</sub>.</p>
+
+        <p><strong>Support span-to-depth ratio:</strong> 16:1 is standard. Note that for soft, pliable materials like silk ADM where the tensile:shear strength ratio may be low, verify that failure occurs in the outer fibres due to bending moment alone (not shear failure). If shear failure is suspected, increase the span-to-depth ratio to 32:1 or 40:1 and document the change.</p>
+
+        <div class="acc-note"><strong>Anisotropy — cut and test both orientations:</strong> Silk fibroin scaffolds are anisotropic. Flexural modulus and strength will differ significantly in the warp vs weft direction (or longitudinal vs transverse if non-woven). Cut ≥5 specimens in each orientation. Report E<sub>B</sub> and σ<sub>fM</sub> separately for each direction. This is not required by D790-17 for isotropic plastics but is essential for silk ADM characterisation.</div>
+
+        <p><strong>Expected load-deflection curve behaviour:</strong> Silk ADM is semi-rigid and hydrophilic. Expect Curve c (Fig. 1 of D790-17) — no break or yield within the 5% strain limit under Procedure A. If this occurs, switch to <strong>Procedure B</strong> (Z = 0.10 mm/mm/min) and document the switch. If still no break, report the stress at 5% strain as the primary result. This is clinically useful — it tells you the load the scaffold transmits to surrounding tissue at maximum physiological deformation.</p>
+
+        <p><strong>Conditioning note:</strong> D618 standard conditioning (23 °C, 50% RH) applies to plastics. Silk ADM is implanted in a wet physiological environment. Run a parallel set of specimens in <strong>PBS-hydrated state</strong> (soak 30 min in PBS at 37 °C before testing, test while wet). Report both dry and wet values. The wet state will typically show a 30–60% reduction in E<sub>B</sub> vs dry — this is the clinically relevant data point for your breast reconstruction application.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGER NOTE -->
+  <div class="accordion">
+    <button class="accordion-btn" onclick="toggleAcc(this)" aria-expanded="false">
+      <div class="acc-icon acc-icon-mgr">📋</div>
+      <div>
+        <div class="acc-title">Manager note — what this test tells us &amp; why it matters</div>
+        <div class="acc-sub">Plain-language summary of what the ASTM D790-17 flexural test is measuring and why it is critical for breast reconstruction ADM qualification</div>
+      </div>
+      <div class="acc-chevron">▾</div>
+    </button>
+    <div class="accordion-body">
+      <div class="acc-content">
+        <p><strong>What is this test actually doing?</strong> The ASTM D790-17 flexural test physically bends a strip of the silk ADM matrix over two support rods with a single central load — exactly like a beam being bent. As we push down, we record how much force is needed and how much the material deflects. From this simple test, we extract two critical numbers:</p>
+
+        <ul class="acc-list">
+          <li><strong>Flexural modulus (E<sub>B</sub>, in MPa)</strong> — stiffness. How much the material resists bending. A high modulus = stiff. A low modulus = flexible. For breast reconstruction, we need a sweet spot: stiff enough to structurally support the implant, flexible enough to conform to the chest wall contour and not cause patient discomfort.</li>
+          <li><strong>Flexural strength (σ<sub>fM</sub>, in MPa)</strong> — how much bending stress the scaffold can survive before it yields or breaks. This sets the safety margin: the scaffold must never fail under physiological loading during daily activity (breathing, movement, pressure).</li>
+        </ul>
+
+        <div class="acc-note"><strong>Why does this test qualify our silk ADM for clinical use?</strong> Existing commercial ADMs (AlloDerm, DermACELL, BellaCell HD) have documented flexural stiffness values in the range of 0.28–0.90 N/mm. Our silk ADM's E<sub>B</sub> from D790-17 lets us directly compare against those benchmarks and claim "our material is mechanically comparable to X" in regulatory submissions and publications.</div>
+
+        <p><strong>What if the material doesn't break in the test?</strong> This is actually expected — soft biomaterials like silk are elastic and tough. The standard accounts for this: if no break occurs, we stop at 5% strain and report the stress at that point. This is still a valid, publishable result. If we need a stronger signal, we switch to a faster strain rate (Procedure B) and document that in the report.</p>
+
+        <p><strong>Timeline and resource estimate:</strong> With specimens pre-cut and the Instron set up, a full batch of 5 specimens takes approximately 2–3 hours (including conditioning, setup, testing both dry and PBS-hydrated states). Standard statistical analysis adds another 30 minutes. This test can be completed within a single working day per material batch.</p>
+
+        <div class="acc-note"><strong>Regulatory relevance:</strong> ASTM D790-17 is a recognised international standard (harmonised with ISO 178) and is accepted by CDSCO, FDA, and CE for mechanical characterisation of medical device biomaterials. Results from this test can be directly cited in a 510(k) technical file, PMCF data, or a research publication — which strengthens our IP and clinical validation pipeline.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SILK-SPECIFIC ═══════════════════ -->
+  <div class="section-label">Silk-specific considerations not covered by ASTM D790-17</div>
+
+  <div class="silk-grid">
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#e0f5ef;">💧</div>
+        <div>
+          <div class="sc-cat" style="color:#0a6b53;">Hydration state</div>
+          <h3>Always test in PBS-wet state</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>ASTM D790-17 conditions specimens at 23 °C / 50% RH (standard plastic conditions). Silk ADM is implanted in a wet, 37 °C physiological environment. Dry silk is 30–60% stiffer than hydrated silk — dry-state results will overestimate the scaffold's in-service stiffness and may mislead clinical decision-making.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Prepare a parallel set of specimens soaked in PBS at 37 °C for 30 minutes. Test while wet. Report dry state results AND wet state results separately. Wet-state E<sub>B</sub> is the clinically relevant value for all regulatory filings.</p>
+        <span class="silk-action ia-teal">Mandatory for clinical correlation</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#eeebfb;">🧵</div>
+        <div>
+          <div class="sc-cat" style="color:#3d2880;">Anisotropy</div>
+          <h3>Test both fibre orientations</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>D790-17 tests isotropic plastics in one direction. Silk fibroin scaffolds (woven, knitted, or aligned electrospun) have directionally dependent mechanical properties. Flexural modulus and strength can differ by 2× or more between the fibre direction and the cross-fibre direction.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Cut ≥5 specimens in the longitudinal (along-fibre) direction AND ≥5 in the transverse (cross-fibre) direction. Report E<sub>B</sub>, σ<sub>fM</sub>, and ε<sub>fB</sub> separately for each orientation. This is essential for understanding how the implant will behave under the directional forces it experiences in vivo.</p>
+        <span class="silk-action ia-purple">2 orientation sets required</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#fef3e2;">📉</div>
+        <div>
+          <div class="sc-cat" style="color:#9a5e08;">No-break behaviour</div>
+          <h3>Silk will likely not break at 5% strain</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>ASTM D790-17 primarily targets plastics that break at small deflections (Curve a). Silk ADM is tough and elastic — it is highly likely to show Curve c behaviour (no yield or break within 5% strain), especially when hydrated. Procedure A alone may not be sufficient.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Run Procedure A first (Z = 0.01 mm/mm/min). If no break or yield within 5% strain, document this result then run Procedure B (Z = 0.10 mm/mm/min) on a fresh set of specimens. Report the stress at 5% strain as the primary flexural result. If benchmarking against commercial ADMs, report flexural modulus as the primary comparator metric since strength comparisons require a common failure mode.</p>
+        <span class="silk-action ia-amber">Run Procedure B as fallback</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#fdeaea;">⏱</div>
+        <div>
+          <div class="sc-cat" style="color:#8b2828;">Time-dependence</div>
+          <h3>Viscoelastic creep under sustained load</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>Silk fibroin is a viscoelastic biopolymer — its mechanical response is time-dependent. Under a sustained load, the material will continue to deform (creep) beyond the initial elastic response. ASTM D790-17 measures instantaneous load-deflection behaviour only and does not capture long-term creep, which is clinically relevant for a permanent implant support.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Supplement D790-17 with a <strong>creep compliance test</strong> (ASTM D2990 or ISO 899-1) — apply a constant sub-yield load and record deformation over 100–1000 hours. Report the flexural creep compliance D(t). This data is increasingly expected in breast implant device submissions and differentiates a rigorous characterisation from a basic one.</p>
+        <span class="silk-action ia-coral">Supplement with ASTM D2990 creep test</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#e8eef5;">🔁</div>
+        <div>
+          <div class="sc-cat" style="color:#1a3a5c;">Fatigue / cyclic loading</div>
+          <h3>In vivo loading is cyclic, not monotonic</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>D790-17 applies a single monotonic (one-direction, increasing) load until failure or 5% strain. A breast implant support experiences millions of low-amplitude cyclic flexural loads in vivo (breathing: ~12 cycles/min × 525,600 min/year). A scaffold that passes D790-17 could still fail by fatigue under cyclic loading.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Supplement with a <strong>cyclic flexural fatigue test</strong> at 30–50% of the D790-17 flexural strength. Run at 1–5 Hz to simulate physiological frequency. Report number of cycles to failure and the stress–life (S–N) curve. This is particularly important for silk ADM because silk degrades in vivo — fatigue life may decrease as degradation progresses.</p>
+        <span class="silk-action ia-navy">Strongly recommended for regulatory filing</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#e0f5ef;">🌡</div>
+        <div>
+          <div class="sc-cat" style="color:#0a6b53;">Temperature sensitivity</div>
+          <h3>Test at 37 °C in addition to 23 °C</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>ASTM D790-17 tests at room temperature (23 °C). Silk fibroin's mechanical properties are temperature-sensitive — the modulus at 37 °C (body temperature) will be lower than at 23 °C due to increased chain mobility and plasticisation by water. D790-17 results at 23 °C will overestimate in-service stiffness.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Use an environmental chamber or thermal bath fixture to test PBS-hydrated specimens at 37 °C. Report E<sub>B</sub> at 23 °C (standard, for comparison) AND E<sub>B</sub> at 37 °C (in-service condition, for clinical relevance). The delta between the two values is the thermal compliance correction factor — document it explicitly in your characterisation report.</p>
+        <span class="silk-action ia-teal">Report both 23 °C and 37 °C values</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#eeebfb;">🧬</div>
+        <div>
+          <div class="sc-cat" style="color:#3d2880;">β-sheet crystallinity</div>
+          <h3>Correlate E<sub>B</sub> with FTIR / XRD crystallinity index</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>The flexural modulus of silk fibroin is directly governed by its β-sheet crystallinity content — higher β-sheet fraction (silk II polymorph) = higher stiffness and slower biodegradation. ASTM D790-17 reports a mechanical property but does not identify the root cause of batch-to-batch variability in modulus.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Run FTIR (amide I peak at ~1625 cm⁻¹ for β-sheet) and XRD (peaks at ~9.7° and ~20.7° 2θ) on each specimen batch. Establish a correlation between crystallinity index and E<sub>B</sub>. This correlation becomes your <strong>in-process quality control tool</strong> — much faster to run spectroscopy than a full D790 test on every production batch.</p>
+        <span class="silk-action ia-purple">Build crystallinity–modulus correlation</span>
+      </div>
+    </div>
+
+    <div class="silk-card">
+      <div class="silk-card-head">
+        <div class="silk-card-icon" style="background:#fef3e2;">📊</div>
+        <div>
+          <div class="sc-cat" style="color:#9a5e08;">Benchmarking strategy</div>
+          <h3>How to compare your results to commercial ADMs</h3>
+        </div>
+      </div>
+      <div class="silk-card-body">
+        <p>Commercial ADM mechanical data (AlloDerm, DermACELL, BellaCell HD, Strattice) is typically reported as stiffness (N/mm) from probe compression or suture pull-out — not always as flexural modulus (MPa) from a D790-17 test. Direct comparison requires careful normalisation by specimen geometry.</p>
+        <div class="silk-divider"></div>
+        <p><strong>Action:</strong> Report E<sub>B</sub> in MPa (from D790-17) AND convert to apparent stiffness k (N/mm) using the beam bending formula k = 48EI/L³ where I = bd³/12. This allows cross-comparison with literature values. Additionally, run ASTM F1306 (burst strength and suture pull-out) alongside D790-17 so your mechanical characterisation uses the same standards as the predicate device comparisons in the literature.</p>
+        <span class="silk-action ia-amber">Run D790 + F1306 in parallel</span>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div>
+    <p>ASTM D790-17 · Silk-Based Acellular Dermal Matrix · Breast Implant Support Application</p>
+    <p style="margin-top:3px;">Serigen Mediproducts Pvt Ltd · R&amp;D Department · May 2026</p>
+  </div>
+  <div class="watermark">Compiled with reference to ASTM D790-17 standard document</div>
+</div>
+
+<script>
+  function toggleAcc(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    btn.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+</script>
+</body>
+</html>
